@@ -15,6 +15,17 @@
 <meta name="description" content="Create a free online shop link. Customers browse your products and order on WhatsApp.">
 <meta property="og:title" content="Mini-Store Link">
 <meta property="og:description" content="Create a free online shop link. Customers order on WhatsApp.">
+<script>
+/* safety net: if the app can't finish loading, show a message instead of spinning forever */
+(function(){var msg='';
+function fail(){var s=document.getElementById('splash');if(!s)return;
+ var b='border:0;border-radius:12px;padding:12px 20px;font-weight:700;font-size:15px;cursor:pointer;';
+ s.innerHTML='<div class="lg">MS</div><b style="font-family:Georgia,serif;font-size:20px">Mini-Store Link</b><p style="max-width:300px;text-align:center;font-size:14px;line-height:1.5;color:#7c7a74;padding:0 16px">Could not finish loading. Check your internet, then try again.<br><small>'+msg+'</small></p><button onclick="location.reload()" style="'+b+'background:#141413;color:#fff">Try again</button><button onclick="__fix()" style="'+b+'background:#ebeae5;color:#141413">Fix and reload</button>'}
+window.__fix=function(){var p=[];if(navigator.serviceWorker)p.push(navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(x){return x.unregister()}))}));if(window.caches)p.push(caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}));Promise.all(p).catch(function(){}).then(function(){location.reload()})};
+window.addEventListener('error',function(e){if(e.target&&e.target.tagName==='SCRIPT'){msg='Could not load: '+String(e.target.src||'').split('/').pop()}else if(e.message){msg=e.message}},true);
+setTimeout(function(){var s=document.getElementById('splash');if(s&&!s.classList.contains('out'))fail()},10000);
+})();
+</script>
 <style>
 :root{--ac:#d97757;--on:#fff;--btn:#141413;--btnon:#fff;--bg:#f3f2ee;--bgi:linear-gradient(#f6f5f1,#efeee9);--card:#fff;--line:#e3e1da;--tx:#141413;--mut:#7c7a74;--inp:#ebeae5;--shd:rgba(0,0,0,.06);--bar:rgba(243,242,238,.95)}
 body.th-sunset{--btn:var(--ac);--btnon:var(--on);--bg:#ff9a3d;--bgi:linear-gradient(165deg,#ffc58a 0%,#ffa550 55%,#ff9a3d 100%);--card:#fff;--line:#f1e2d0;--tx:#2b2430;--mut:#4f3d2e;--inp:#f7efe4;--shd:rgba(120,50,0,.18);--bar:rgba(255,255,255,.93)}
@@ -30,6 +41,8 @@ body.th-night{--btn:var(--ac);--btnon:var(--on);--bg:#0e1220;--bgi:radial-gradie
 #pub h2,#pub h3{font-family:inherit}
 .sw{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}.swb{width:70px;height:50px;border-radius:12px;border:3px solid transparent;font-size:11px;font-weight:700;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}.swb.on{border-color:var(--tx);box-shadow:0 0 0 2px var(--card)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-width:0;max-width:100%}
 body{background:var(--bg);background:var(--bgi);background-attachment:fixed;color:var(--tx);font-family:"Trebuchet MS",system-ui,sans-serif;min-height:100vh}
 button{border:0;background:none;color:inherit;font:inherit;cursor:pointer}
 input,textarea,select{width:100%;background:var(--inp);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:13px;font:inherit;font-size:15px;outline:none;margin:5px 0}
@@ -44,7 +57,7 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:700}
 .btn.s{width:auto;padding:9px 14px;font-size:13px;margin:0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
 .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
-.logo{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-weight:700;font-size:20px}
+.logo{display:flex;align-items:center;gap:10px;font-family:Georgia,serif;font-weight:700;font-size:20px;min-width:0;flex:1}.logo span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .lg{width:40px;height:40px;border-radius:10px;background:var(--ac);color:var(--on);display:grid;place-items:center;font-weight:900;overflow:hidden;flex-shrink:0}
 .lg img{width:100%;height:100%;object-fit:cover}
 .tabs{position:fixed;bottom:0;left:0;right:0;background:var(--bar);border-top:1px solid var(--line);display:flex;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:20}
@@ -72,7 +85,7 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:700}
 #sb{position:fixed;inset:0;background:#000a;z-index:80;display:none;align-items:flex-end}#sb.on{display:flex}
 #sh{background:var(--card);color:var(--tx);width:100%;max-width:640px;margin:auto auto 0;border-radius:22px 22px 0 0;padding:18px 16px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;background:#222;color:#fff;padding:12px 18px;border-radius:24px;font-size:14px;z-index:99;display:none;max-width:90%}#toast.on{display:block}
-#splash{position:fixed;inset:0;background:var(--bg);background:var(--bgi);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .5s}
+#splash{position:fixed;top:0;left:0;right:0;bottom:0;width:100%;text-align:center;background:var(--bg);background:var(--bgi);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;transition:opacity .5s}
 #splash.out{opacity:0;pointer-events:none}
 #splash .lg{width:96px;height:96px;font-size:38px;border-radius:26px;animation:pl 1s infinite alternate}
 @keyframes pl{to{transform:scale(1.08)}}
@@ -92,6 +105,486 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:700}
 
 /* ===== BACKGROUND THEMES (orange default, sellers can change) ===== */
 #pTop{position:sticky;top:0;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);margin:-18px -16px 12px;padding:12px 16px 10px;z-index:15;border-top:4px solid var(--ac);box-shadow:0 4px 20px var(--shd)}
+.ph0{display:flex;align-items:center;gap:10px;margin-bottom:8px;min-width:0}.ph0 b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ph0 .lg{width:32px;height:32px;border-radius:8px;font-size:13px}
+.srch{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:0 16px}.srch input{background:none;border:0;margin:0;padding:13px 0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;box-shadow:0 4px 18px var(--shd)}
+.tilebox{background:linear-gradient(135deg,var(--card),var(--bg));background:linear-gradient(135deg,var(--card),color-mix(in srgb,var(--ac) 12%,var(--card)))}
+.tiles{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.tile{flex:0 0 128px;height:112px;border-radius:14px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;font-weight:700;font-size:13px;text-align:left}
+.tile i{font-style:normal;font-size:32px}.tile small{font-weight:400;opacity:.85;font-size:11px;display:block}
+.flash{background:linear-gradient(135deg,#c41e3a,#ff6b3d);border-radius:18px;padding:16px;margin:14px 0;color:#fff;box-shadow:0 8px 24px rgba(196,30,58,.28)}.flash h2{font-size:26px}
+.cd{display:inline-block;background:#fff;color:#c41e3a;font-weight:700;border-radius:20px;padding:5px 12px;font-size:14px;margin-top:10px}
+.slw{position:relative;margin-top:12px;border-radius:14px;overflow:hidden;background:#0003}
+.sl{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.sl::-webkit-scrollbar{display:none}
+.sl img{flex:0 0 100%;width:100%;scroll-snap-align:center;aspect-ratio:16/9;object-fit:cover}
+.dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px}.dots i{width:7px;height:7px;border-radius:4px;background:#fff7;transition:.25s}.dots i.on{background:#fff;width:18px}
+.fs{display:flex;gap:10px;overflow-x:auto;margin-top:14px;scrollbar-width:none}.fs .pc{flex:0 0 160px}
+.pc{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 4px 16px var(--shd)}
+.pc img,.pc .ph{width:100%;height:150px;border-radius:0;object-fit:cover}
+.pc .b{padding:10px;flex:1;display:flex;flex-direction:column;gap:4px}
+.pc b{font-size:14px}.pc .pp{font-size:18px}
+.pc.out{opacity:.5}
+.pc .nm{font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
+.addb{position:absolute;top:8px;right:8px;width:38px;height:38px;border-radius:50%;background:var(--btn);color:var(--btnon);font-size:21px;font-weight:700;z-index:2;box-shadow:0 3px 10px #0005}
+.stp{position:absolute;top:8px;right:8px;display:flex;align-items:center;background:var(--btn);color:var(--btnon);border-radius:22px;z-index:2;height:38px;box-shadow:0 3px 10px #0005}
+.stp button{width:36px;height:38px;font-size:20px;font-weight:700;color:var(--btnon)}.stp b{min-width:16px;text-align:center;font-size:14px;color:var(--btnon)}
+.stk{background:#fdf1d6;color:#c47b00;font-size:12px;font-weight:700;text-align:center;padding:6px}
+.dsc{background:#1a8f3c;color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px}
+.catc{text-align:center;margin:0}.catc img{width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px}.catc .ph{width:100%;height:100px;margin-bottom:8px}.catc b{display:block}
+.ci{display:flex;gap:12px;align-items:center}.ci img,.ci .ph{width:76px;height:76px;border-radius:10px;object-fit:cover;flex-shrink:0}.ci .i{flex:1;display:flex;flex-direction:column;gap:4px}
+.arow{display:flex;align-items:center;gap:14px;width:100%;padding:16px 14px;border-bottom:1px solid var(--line);font-size:15px;text-align:left}.arow span{width:24px;text-align:center}.arow i{margin-left:auto;font-style:normal;color:var(--mut)}
+#cnav{position:fixed;bottom:0;left:0;right:0;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:20}
+#cnav button{flex:1;color:var(--mut);font-size:11px;position:relative;padding:6px 0}#cnav b{display:block;font-size:21px;font-weight:400}#cnav button.on{color:var(--ac);font-weight:700}
+#cbadge{position:absolute;top:0;left:55%;background:var(--ac);color:var(--on);border-radius:10px;font-size:10px;font-style:normal;padding:1px 6px;display:none}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:14px;background:var(--inp);scrollbar-width:none}.gal img{flex:0 0 100%;scroll-snap-align:center;height:330px;object-fit:contain}
+.gc{position:absolute;right:10px;bottom:10px;background:#000a;color:#fff;font-size:12px;padding:3px 10px;border-radius:12px}
+.sh2{margin:16px 0 6px;font-size:15px}.pk li{margin:5px 0 5px 18px;font-size:14px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:2px solid var(--line);border-radius:14px;padding:12px;margin-top:10px;background:var(--card)}
+.opt.on{border-color:var(--ac);box-shadow:0 0 0 3px #f2b70533}
+</style>
+</head>
+<body>
+
+<div id="splash"><div class="lg">MS</div><b style="font-family:Georgia,serif;font-size:22px">Mini-Store Link</b><div class="sp"></div></div>
+
+<!-- PUBLIC SHOP -->
+<div id="pub" class="v">
+ <div id="pTop"><div class="ph0"><div class="lg" id="pLogo"></div><b id="pName" style="font-size:17px"></b><button class="ib" onclick="install()">📲 Install</button></div><div class="srch"><span>🔍</span><input id="pSearch" placeholder="Search products" oninput="PT='home';drawPub()"></div></div>
+ <div id="pBody"></div>
+ <div class="pw" id="pPw">Powered by Mini-Store Link</div>
+</div>
+<nav id="cnav" style="display:none">
+ <button data-t="home" onclick="setPT('home')"><b>⌂</b>Home</button>
+ <button data-t="cat" onclick="setPT('cat')"><b>☷</b>Categories</button>
+ <button data-t="cart" onclick="setPT('cart')"><b>🛒</b>Cart<i id="cbadge"></i></button>
+ <button data-t="wish" onclick="setPT('wish')"><b>♡</b>Wishlist</button>
+ <button data-t="acc" onclick="setPT('acc')"><b>👤</b>Account</button>
+</nav>
+
+<!-- AUTH -->
+<div id="auth" class="v">
+ <div class="hero"><div class="lg">MS</div><h2>Mini-Store Link</h2><p class="mut">Put your shop in one link. Customers order on WhatsApp.</p></div>
+ <div class="card" style="padding:12px"><b style="font-size:14px">🎨 Choose your look</b><div id="authSw"></div></div>
+ <div class="card">
+  <input id="em" type="email" placeholder="Email">
+  <input id="pw" type="password" placeholder="Password (6+ characters)">
+  <label class="ag"><input type="checkbox" id="agree"><span>I agree to the <a href="#terms">Terms of Use</a> and <a href="#privacy">Privacy Policy</a>.</span></label>
+  <div class="row2"><button class="btn" onclick="emailAuth(false)">Log in</button><button class="btn g" onclick="emailAuth(true)">Sign up</button></div>
+  <div class="or">or</div>
+  <button class="btn g" onclick="google()">Continue with Google</button>
+  <p class="mut" style="margin-top:12px;text-align:center"><a href="#" style="color:var(--ac)" onclick="reset();return false">Forgot password?</a></p>
+  <p class="mut" style="text-align:center;margin-top:6px"><a href="#shops" style="color:var(--ac)">Browse shops</a></p>
+  <button class="btn g ib0" onclick="install()">📲 Install app</button>
+ </div>
+</div>
+
+<!-- DASH -->
+<div id="dash" class="v">
+ <div class="top"><div class="logo"><div class="lg" id="dLogo">MS</div><span id="dName">My shop</span></div><div style="display:flex;gap:6px;align-items:center"><button class="ib" onclick="install()">📲 Install</button><button class="btn g s" onclick="auth.signOut()">Log out</button></div></div>
+ <div id="dBody"></div>
+</div>
+<nav class="tabs" id="tabs" style="display:none">
+ <button data-t="prod" class="on" onclick="tab('prod')"><b>▦</b>Products</button>
+ <button data-t="ord" onclick="tab('ord')"><b>☷</b>Orders</button>
+ <button data-t="stats" onclick="tab('stats')"><b>▤</b>Stats</button>
+ <button data-t="promo" onclick="tab('promo')"><b>🏷</b>Promo</button>
+ <button data-t="shop" onclick="tab('shop')"><b>✎</b>Shop</button>
+ <button data-t="share" onclick="tab('share')"><b>⇪</b>Share</button>
+</nav>
+
+<!-- BROWSE SHOPS -->
+<div id="shops" class="v"><div class="top"><div class="logo"><div class="lg">MS</div>Browse shops</div><a class="btn g s" href="#" style="text-decoration:none">Sell here</a></div><div id="shGrid"></div></div>
+
+<!-- LEGAL -->
+<div id="legal" class="v legal"><button class="btn g s" onclick="location.hash='';route()">‹ Back</button><div id="lBody"></div></div>
+
+<div id="ibar"><span style="font-size:26px">📲</span><b>Install the app on your phone</b><button class="go" onclick="install()">Install now</button><button class="x" onclick="hideBar()">×</button></div>
+<div id="sb" onclick="if(event.target===this)closeSh()"><div id="sh"></div></div>
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ===== 1. PASTE YOUR FIREBASE CONFIG HERE ===== */
+const FIREBASE_CONFIG={
+ apiKey:"AIzaSyA1Oh8G27fvnorrVd3kWOzhtl9mWVTvBFk",authDomain:"minilink-web.firebaseapp.com",projectId:"minilink-web",
+ storageBucket:"minilink-web.firebasestorage.app",messagingSenderId:"823250830184",appId:"1:823250830184:web:c0510c4a65b0664976ccdd"};
+const SUPPORT_EMAIL="lhelnaldo123@gmail.com", FREE_LIMIT=10, APP_NAME="Mini-Store Link";
+/* ===== 2. YOUR PREMIUM SETTINGS ===== */
+const OWNER_MOMO="0599428017", OWNER_NAME="Aaron Addo", OWNER_WA="233552624616", PRICE="GH₵25 / month";
+/* SECRET must be IDENTICAL in admin.html. Change it to your own private text, then keep it secret. */
+const SECRET="msk-7Qm2xV9pLd4Zr8TnW3bH";
+/* ============================================== */
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'GH₵'+(+n||0).toLocaleString('en',{maximumFractionDigits:2});
+firebase.initializeApp(FIREBASE_CONFIG);
+const auth=firebase.auth(),db=firebase.firestore();
+db.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),3600)}
+function view(id){document.querySelectorAll('.v').forEach(v=>v.classList.toggle('on',v.id===id));$('#tabs').style.display=id==='dash'?'flex':'none';$('#cnav').style.display=id==='pub'?'flex':'none';applyTheme(id==='pub'?(PS&&PS.theme):(id==='dash'&&SHOP&&SHOP.dtheme)?SHOP.dtheme:LSg('ms_dth','classic'));window.scrollTo(0,0)}
+let OPEN=null;
+function sheet(html){$('#sh').innerHTML=html;$('#sb').classList.add('on')}const closeSh=()=>{OPEN=null;$('#sb').classList.remove('on')};
+function applyColor(c){if(/^#[0-9a-f]{6}$/i.test(c||'')){document.documentElement.style.setProperty('--ac',c);const r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),b=parseInt(c.slice(5,7),16);document.documentElement.style.setProperty('--on',(r*299+g*587+b*114)/1000>165?'#1b1400':'#fff')}}
+function compress(file,max,q=.72){return new Promise((res,rej)=>{const im=new Image,u=URL.createObjectURL(file);im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',q))};im.onerror=rej;im.src=u})}
+const logoHTML=s=>s.logo?`<img src="${s.logo}" alt="">`:esc((s.name||'M').slice(0,2).toUpperCase());
+const copyTxt=t=>{try{navigator.clipboard.writeText(t).then(()=>toast('Copied ✅'))}catch(e){toast('Long-press to copy')}};
+const isPro=s=>!!(s&&s.premium&&(!s.until||s.until>Date.now()));
+async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+
+/* ---------- INSTALL (PWA) ---------- */
+let DIP;addEventListener('beforeinstallprompt',e=>{e.preventDefault();DIP=e});
+if(matchMedia('(display-mode: standalone)').matches||navigator.standalone)document.documentElement.classList.add('standalone');
+function install(){
+ if(DIP){DIP.prompt();DIP.userChoice&&DIP.userChoice.then(r=>{DIP=null;if(r&&r.outcome==='accepted')hideBar()});return}
+ const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ sheet(`<h3>📲 Install the app</h3><p class="mut" style="margin:10px 0;line-height:1.9">${ios?'1. Tap the <b>Share</b> button in Safari<br>2. Choose <b>Add to Home Screen</b><br>3. Tap <b>Add</b>':'1. Tap the <b>⋮ menu</b> in Chrome<br>2. Tap <b>Install app</b> (or Add to Home screen)<br>3. Tap <b>Install</b>'}</p><p class="mut">Can't see it? Open this page in Chrome (Android) or Safari (iPhone).</p><button class="btn" onclick="closeSh()">Got it</button>`)}
+addEventListener('appinstalled',()=>{document.documentElement.classList.add('standalone');toast('Installed ✅')});
+const barOK=()=>!document.documentElement.classList.contains('standalone')&&Date.now()-LSg('ms_idis',0)>2592e5;
+function showBar(){if(barOK())$('#ibar').classList.add('on')}
+function hideBar(){$('#ibar').classList.remove('on');LSs('ms_idis',Date.now())}
+if('serviceWorker'in navigator){const had=navigator.serviceWorker.controller;let rl=0;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(had&&!rl){rl=1;location.reload()}});addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+
+/* ---------- ROUTING ---------- */
+const RESERVED=['','index.html','terms','privacy','app','shops','404.html','admin','admin.html'];
+function slugFromUrl(){const q=new URLSearchParams(location.search).get('s');if(q)return q.toLowerCase();if(location.hostname.endsWith('github.io'))return '';const p=location.pathname.split('/')[1]||'';return RESERVED.includes(p.toLowerCase())?'':p.toLowerCase()}
+let authReady=false,user=null;
+function route(){
+ if(location.hash==='#terms'||location.hash==='#privacy'){legal(location.hash.slice(1));return}
+ if(location.hash==='#shops'){loadShops();return}
+ const slug=slugFromUrl();
+ if(slug){loadPublic(slug);return}
+ if(!authReady)return;
+ user?loadDash():view('auth')}
+addEventListener('hashchange',route);
+
+/* ---------- AUTH ---------- */
+auth.onAuthStateChanged(u=>{user=u;authReady=true;route();hideSplash()});
+function hideSplash(){setTimeout(showBar,3000);setTimeout(()=>{$('#splash').classList.add('out');setTimeout(()=>$('#splash')?.remove(),600)},900)}
+const authErr=x=>x.code==='auth/email-already-in-use'?'Account exists. Tap Log in.':x.code==='auth/invalid-credential'||x.code==='auth/wrong-password'?'Wrong email or password':x.message;
+function needAgree(){if(!$('#agree').checked){toast('Tick the box to accept the Terms and Privacy Policy');return false}return true}
+async function emailAuth(signup){const e=$('#em').value.trim(),p=$('#pw').value;if(!e||p.length<6)return toast('Enter your email and a password of 6+ characters');
+ if(signup&&!needAgree())return;
+ try{signup?await auth.createUserWithEmailAndPassword(e,p):await auth.signInWithEmailAndPassword(e,p)}catch(x){toast(authErr(x))}}
+async function google(){if(!needAgree())return;const pr=new firebase.auth.GoogleAuthProvider();try{await auth.signInWithPopup(pr)}catch(x){if(x.code==='auth/popup-blocked'||x.code==='auth/operation-not-supported-in-this-environment')return auth.signInWithRedirect(pr);if(x.code==='auth/unauthorized-domain')toast('Add this site in Firebase → Authentication → Authorized domains');else if(x.code!=='auth/popup-closed-by-user')toast('Google sign-in failed: '+x.code)}}
+async function reset(){const e=$('#em').value.trim();if(!e)return toast('Type your email first');try{await auth.sendPasswordResetEmail(e);toast('Reset link sent. Check your email.')}catch(x){toast(x.message)}}
+
+/* ---------- PUBLIC SHOP ---------- */
+const waNum=n=>{n=String(n||'').replace(/\D/g,'');return n.startsWith('0')?'233'+n.slice(1):n};
+const hd=s=>String(s||'').trim().replace(/^https?:\/\/(www\.)?[^/]+\//,'').split(/[/?]/)[0].replace(/^@/,'');
+let PS=null,PP=[],PCAT='All',SORT='new',PT='home',CART={},CF={},CATS=[],unsubP,WISH=[],deep=false,cdT,slT,SLI=0,SLtouch=0;
+const LSg=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},LSs=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+WISH=LSg('ms_wish',[]);CF=LSg('ms_cf',{});
+const saveC=()=>LSs('ms_cart_'+PS.id,CART);
+const isOut=p=>p.stock===false||p.qty===0;
+const promoOn=()=>{const m=PS&&PS.promo;return !!(m&&m.on&&(!m.end||m.end>Date.now()))};
+const PR=p=>{const a=promoOn()&&PS.promo.pct>0;const now=a?+(p.price*(1-PS.promo.pct/100)).toFixed(2):p.price;const old=a?(p.old>p.price?p.old:p.price):(p.old>p.price?p.old:0);return{now,old}};
+const disc=p=>{const r=PR(p);return r.old>r.now?Math.round((1-r.now/r.old)*100):0};
+const NETS=()=>[['MTN MoMo',PS.mtn||PS.momo],['Telecel Cash',PS.tcl],['AT Money',PS.atg]].filter(x=>x[1]);
+const CHS=()=>[['wa','💬','WhatsApp'],...(PS.tg?[['tg','✈️','Telegram']]:[]),...(PS.ig?[['ig','📸','Instagram']]:[]),...(PS.fb?[['fb','👍','Facebook']]:[])];
+async function loadPublic(slug){
+ view('pub');
+ const d=await db.collection('shops').doc(slug).get().catch(()=>null);
+ if(!d||!d.exists){meta('robots','noindex');$('#pName').textContent='Mini-Store Link';$('#pBody').innerHTML='<div class="box" style="text-align:center;padding:30px"><h3>Shop not found</h3><p class="mut" style="margin-top:8px">Check the link, or ask the seller to share it again.</p></div>';return}
+ PS={id:slug,...d.data()};applyColor(PS.color);applyTheme(PS.theme);seo(PS);CART=LSg('ms_cart_'+slug,{});
+ $('#pLogo').innerHTML=logoHTML(PS);$('#pName').textContent=PS.name;$('#pSearch').placeholder='Search in '+PS.name;
+ if(isPro(PS))$('#pPw').style.display='none';
+ if(!sessionStorage['v_'+slug]){sessionStorage['v_'+slug]=1;db.collection('shops').doc(slug).update({visits:firebase.firestore.FieldValue.increment(1)}).catch(()=>{})}
+ unsubP&&unsubP();unsubP=db.collection('shops').doc(slug).collection('products').orderBy('created','desc').onSnapshot(q=>{PP=q.docs.map(x=>({id:x.id,...x.data()}));drawPub();const pid=new URLSearchParams(location.search).get('p');if(pid&&!deep){deep=true;prodSheet(pid)}});
+ clearInterval(cdT);cdT=setInterval(tick,1000);clearInterval(slT);slT=setInterval(slAuto,3800)}
+function tick(){const e=$('#cd');if(!e||!PS)return;const end=promoOn()&&PS.promo.end?PS.promo.end:new Date().setHours(24,0,0,0),ms=Math.max(0,end-Date.now()),z=n=>String(n).padStart(2,'0'),dd=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5);e.textContent=(dd?dd+'d ':'')+`${z(h)}h : ${z(Math.floor(ms%36e5/6e4))}m : ${z(Math.floor(ms%6e4/1e3))}s`}
+/* promo slider: auto-slides, swipeable */
+function slScroll(el){SLI=Math.round(el.scrollLeft/el.clientWidth);slDots()}
+function slDots(){document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on',i===SLI))}
+function slAuto(){const s=$('#sl');if(!s||Date.now()-SLtouch<6000||$('#sb').classList.contains('on'))return;const n=s.children.length;if(n<2)return;SLI=(SLI+1)%n;s.scrollTo({left:SLI*s.clientWidth,behavior:'smooth'})}
+function setPT(t){PT=t;window.scrollTo(0,0);drawPub()}
+function drawPub(){if(!PS)return;
+ document.querySelectorAll('#cnav button').forEach(b=>b.classList.toggle('on',b.dataset.t===(PT==='check'?'cart':PT)));
+ const n=Object.values(CART).reduce((a,b)=>a+b,0),bd=$('#cbadge');bd.textContent=n;bd.style.display=n?'block':'none';
+ $('#pBody').innerHTML=({home:vHome,cat:vCat,cart:vCart,check:vCheck,wish:vWish,acc:vAcc})[PT]();tick();
+ const s=$('#sl');if(s){SLI=Math.min(SLI,s.children.length-1);s.scrollLeft=SLI*s.clientWidth;slDots()}}
+function card(p){const n=CART[p.id]||0,out=isOut(p),dc=disc(p),low=p.qty>0&&p.qty<=10,r=PR(p);
+ return `<div class="pc ${out?'out':''}"><div onclick="prodSheet('${p.id}')">${p.img?`<img src="${p.img}" alt="${esc(p.name)}" loading="lazy">`:'<div class="ph">🛍️</div>'}</div>${out?'':(n?`<div class="stp"><button onclick="cart('${p.id}',-1)">−</button><b>${n}</b><button onclick="cart('${p.id}',1)">+</button></div>`:`<button class="addb" onclick="cart('${p.id}',1)">+</button>`)}${low?`<div class="stk">${p.qty} items in stock</div>`:''}${out?'<div class="stk" style="background:#eee;color:#888">Sold out</div>':''}<div class="b" onclick="prodSheet('${p.id}')"><span class="nm">${esc(p.name)}</span><b class="pp">${money(r.now)}</b>${dc?`<span><span class="old" style="margin:0 6px 0 0">${money(r.old)}</span><span class="dsc">-${dc}%</span></span>`:''}</div></div>`}
+const tile=(bg,ic,t,sub,fn)=>`<button class="tile" style="background:${bg}" onclick="${fn}"><i>${ic}</i><span>${t}<small>${sub}</small></span></button>`;
+function vHome(){const q=$('#pSearch').value.toLowerCase().trim();
+ const cats=['All',...new Set(PP.map(p=>p.cat).filter(Boolean))];CATS=cats;if(!cats.includes(PCAT))PCAT='All';
+ let l=PP.filter(p=>(PCAT==='All'||p.cat===PCAT)&&(p.name+' '+(p.desc||'')+' '+(p.cat||'')).toLowerCase().includes(q));
+ if(SORT==='lo')l.sort((a,b)=>PR(a).now-PR(b).now);if(SORT==='hi')l.sort((a,b)=>PR(b).now-PR(a).now);
+ let h='';
+ if(!q&&PCAT==='All'){
+  const nets=NETS();
+  h+=`<div class="box tilebox"><h2 style="font-size:19px;margin-bottom:12px">${esc((PS.about||'Welcome to '+PS.name).slice(0,70))}</h2><div class="tiles">${tile('linear-gradient(135deg,#111,#3a3a3a)','📍','Find us',esc(PS.location||'Contact the seller'),'chat()')}${tile('linear-gradient(135deg,#6b7280,#374151)','🚚','Delivery',esc((PS.delivery||'Ask the seller').slice(0,30)),'chat()')}${tile('linear-gradient(135deg,#7c3aed,#4c1d95)','📞','Call to order','Chat on WhatsApp','chat()')}${nets.length?tile('linear-gradient(135deg,#ffcc00,#b38600)','💳','Pay with MoMo',esc(nets.map(n=>n[0].split(' ')[0]).join(' · ')),"setPT('cart')"):''}</div></div>`;
+  const pm=promoOn()?PS.promo:null,deals=PP.filter(p=>disc(p)>0&&!isOut(p)),ims=pm&&pm.imgs||[];
+  if(pm||deals.length)h+=`<div class="flash"><h2>${esc(pm&&pm.title||'Flash Sales')}</h2>${pm&&pm.text?`<p style="margin-top:4px;font-size:14px;opacity:.95">${esc(pm.text)}</p>`:''}${pm&&pm.pct?`<p style="margin-top:6px"><b style="font-size:18px">${pm.pct}% OFF everything</b></p>`:''}${ims.length?`<div class="slw"><div class="sl" id="sl" onscroll="slScroll(this)" ontouchstart="SLtouch=Date.now()" onpointerdown="SLtouch=Date.now()">${ims.map(s=>`<img src="${s}" alt="">`).join('')}</div>${ims.length>1?`<div class="dots" id="dots">${ims.map((_,i)=>`<i class="${i===SLI?'on':''}"></i>`).join('')}</div>`:''}</div>`:''}<span class="cd">🕐 <span id="cd"></span></span>${deals.length?`<div class="fs">${deals.map(card).join('')}</div>`:''}</div>`}
+ h+=`<div class="chips">${cats.map((c,i)=>`<button class="chip ${c===PCAT?'on':''}" onclick="PCAT=CATS[${i}];drawPub()">${esc(c)}</button>`).join('')}</div>
+ <div class="top" style="margin:4px 0 10px"><h3>${q?'Results':esc(PCAT==='All'?'All products':PCAT)} <span class="mut">(${l.length})</span></h3><select style="width:auto;margin:0;padding:8px" onchange="SORT=this.value;drawPub()"><option value="new">Newest</option><option value="lo" ${SORT==='lo'?'selected':''}>Price ↑</option><option value="hi" ${SORT==='hi'?'selected':''}>Price ↓</option></select></div>`;
+ return h+(l.length?`<div class="grid">${l.map(card).join('')}</div>`:'<div class="box mut" style="text-align:center">No products found.</div>')}
+function vCat(){const m={};PP.forEach(p=>{if(p.cat)(m[p.cat]=m[p.cat]||[]).push(p)});CATS=['All',...Object.keys(m)];
+ return '<h3 style="margin:6px 0 12px">Categories</h3>'+(CATS.length>1?`<div class="grid">${Object.entries(m).map(([c,l],i)=>`<div class="box catc" onclick="PCAT=CATS[${i+1}];$('#pSearch').value='';setPT('home')">${l[0].img?`<img src="${l[0].img}">`:'<div class="ph">🛍️</div>'}<b>${esc(c)}</b><span class="mut">${l.length} items</span></div>`).join('')}</div>`:'<div class="box mut" style="text-align:center">No categories yet.</div>')}
+function vWish(){const l=PP.filter(p=>WISH.includes(p.id));return '<h3 style="margin:6px 0 12px">Wishlist</h3>'+(l.length?`<div class="grid">${l.map(card).join('')}</div>`:'<div class="box" style="text-align:center;padding:36px 14px"><div style="font-size:50px">♡</div><p class="mut" style="margin-top:8px">Tap the heart on a product to save it here.</p></div>')}
+function cart(id,d){CART[id]=Math.max(0,(CART[id]||0)+d);const p=PP.find(x=>x.id===id);if(p&&p.qty>0&&CART[id]>p.qty){CART[id]=p.qty;toast('Only '+p.qty+' in stock')}if(!CART[id])delete CART[id];saveC();drawPub();const a=document.getElementById('pact');if(a&&OPEN===id)a.innerHTML=pact(id)}
+const cartItems=()=>Object.entries(CART).map(([id,q])=>({p:PP.find(x=>x.id===id&&!isOut(x)),q})).filter(x=>x.p);
+const cartTotal=it=>it.reduce((a,x)=>a+x.q*PR(x.p).now,0);
+function vCart(){const it=cartItems();
+ if(!it.length)return `<div class="box" style="text-align:center;padding:40px 14px"><div style="font-size:56px">🛒</div><h3>Your cart is empty</h3><p class="mut" style="margin:8px 0">Tap + on a product to add it.</p><button class="btn" onclick="setPT('home')">Start shopping</button></div>`;
+ return `<h3 style="margin:6px 0">Cart (${it.length})</h3>`+it.map(x=>`<div class="box ci">${x.p.img?`<img src="${x.p.img}">`:'<div class="ph">🛍️</div>'}<div class="i"><b style="font-size:14px">${esc(x.p.name)}</b><b style="color:var(--ac)">${money(PR(x.p).now)}</b><div class="q" style="justify-content:flex-start"><button onclick="cart('${x.p.id}',-1)">−</button><b>${x.q}</b><button onclick="cart('${x.p.id}',1)">+</button></div></div><button class="mut" onclick="cart('${x.p.id}',-${x.q})">🗑</button></div>`).join('')+
+ `<div class="box"><div class="top" style="margin:0"><b>Total</b><b style="font-size:21px">${money(cartTotal(it))}</b></div>${PS.delivery?`<p class="mut">🚚 ${esc(PS.delivery)}</p>`:''}<button class="btn" onclick="setPT('check')">Checkout →</button><button class="btn g" onclick="setPT('home')">Continue shopping</button></div>`}
+const opt=(k,ic,t,s)=>`<button class="opt ${CF.pay===k?'on':''}" onclick="CF.pay='${k}';drawPub()"><span style="font-size:26px">${ic}</span><span><b>${t}</b><small class="mut" style="display:block">${s}</small></span></button>`;
+function vCheck(){const it=cartItems();if(!it.length)return vCart();
+ const t=cartTotal(it),nets=NETS(),cod=PS.cod!==false,chs=CHS();
+ if(user&&!CF.n)CF.n=user.displayName||'';
+ if(!CF.pay||(CF.pay==='cod'&&!cod)||(CF.pay==='momo'&&!nets.length))CF.pay=cod?'cod':nets.length?'momo':'cod';
+ if(CF.net==null||!nets[CF.net])CF.net=0;
+ if(!chs.find(c=>c[0]===CF.ch))CF.ch='wa';
+ return `<button class="btn g s" onclick="setPT('cart')">‹ Back to cart</button><h3 style="margin:12px 0 4px">Checkout</h3>
+ <div class="box"><b>Order summary</b>${it.map(x=>`<div class="top" style="margin:8px 0 0"><span>${x.q}× ${esc(x.p.name)}</span><b>${money(x.q*PR(x.p).now)}</b></div>`).join('')}<div class="top" style="margin:12px 0 0;border-top:1px solid var(--line);padding-top:10px"><b>Total</b><b style="font-size:21px">${money(t)}</b></div>${PS.delivery?`<p class="mut" style="margin-top:6px">🚚 ${esc(PS.delivery)}</p>`:''}</div>
+ <div class="box"><b>Your details</b><input placeholder="Your name" value="${esc(CF.n)}" oninput="CF.n=this.value"><input type="tel" placeholder="Phone number" value="${esc(CF.ph)}" oninput="CF.ph=this.value"><input placeholder="Delivery location / pickup" value="${esc(CF.a)}" oninput="CF.a=this.value"><input placeholder="Note (optional)" value="${esc(CF.t)}" oninput="CF.t=this.value"></div>
+ <div class="box"><b>How do you want to pay?</b>${cod?opt('cod','💵','Pay on delivery','Pay when you receive your order'):''}${nets.length?opt('momo','📱','Pay now with Mobile Money','MTN, Telecel or AirtelTigo'):''}
+ ${CF.pay==='momo'?`<div class="chips">${nets.map((n,i)=>`<button class="chip ${i===CF.net?'on':''}" onclick="CF.net=${i};drawPub()">${n[0]}</button>`).join('')}</div><div class="payinfo">Send <b>${money(t)}</b> to<br><b style="font-size:21px">${esc(nets[CF.net][1])}</b>${PS.momoName?`<br><span>Name: ${esc(PS.momoName)}</span>`:''}</div><input placeholder="Your MoMo name or transaction ID (optional)" value="${esc(CF.ref)}" oninput="CF.ref=this.value"><p class="mut">After paying, place your order below and send the payment screenshot in the chat.</p>`:''}</div>
+ <div class="box"><b>Send your order through</b><div class="chips">${chs.map(c=>`<button class="chip ${c[0]===CF.ch?'on':''}" onclick="CF.ch='${c[0]}';drawPub()">${c[1]} ${c[2]}</button>`).join('')}</div>${CF.ch!=='wa'?'<p class="mut">Your order message will be copied. Just paste it in the chat and send.</p>':''}<button class="btn" onclick="order()">Place order · ${money(t)}</button></div>`}
+const chat=()=>window.open('https://wa.me/'+waNum(PS.whatsapp)+'?text='+encodeURIComponent('Hi '+PS.name+', I need help'),'_blank');
+const openCh=k=>window.open({tg:'https://t.me/'+hd(PS.tg),ig:'https://instagram.com/'+hd(PS.ig),fb:'https://facebook.com/'+hd(PS.fb)}[k],'_blank');
+const shareShop=()=>window.open('https://wa.me/?text='+encodeURIComponent('Shop with '+PS.name+' 🛍️ '+shopUrl(PS.id)));
+function histSheet(){const h=LSg('ms_hist_'+PS.id,[]);sheet('<h3>My orders</h3>'+(h.length?h.map(o=>`<div class="pr"><div class="i"><b>${money(o.total)}</b><span class="mut">${esc(o.items)}</span><span class="mut">${new Date(o.t).toLocaleString()}</span></div></div>`).join(''):'<p class="mut" style="margin:12px 0">No orders from this phone yet.</p>')+'<button class="btn g" onclick="closeSh()">Close</button>')}
+/* customer login */
+function loginSheet(){sheet(`<h3>Log in or sign up</h3><p class="mut" style="margin:6px 0">Save your details for faster checkout.</p><input id="cem" type="email" placeholder="Email"><input id="cpw" type="password" placeholder="Password (6+ characters)"><label class="ag"><input type="checkbox" id="cag"><span>I agree to the <a href="#terms" onclick="closeSh()">Terms of Use</a> and <a href="#privacy" onclick="closeSh()">Privacy Policy</a>.</span></label><div class="row2"><button class="btn" onclick="cAuth(false)">Log in</button><button class="btn g" onclick="cAuth(true)">Sign up</button></div><button class="btn g" onclick="cGoogle()">Continue with Google</button><button class="btn g" onclick="closeSh()">Close</button>`)}
+async function cAuth(su){const e=$('#cem').value.trim(),p=$('#cpw').value;if(!e||p.length<6)return toast('Enter your email and a password of 6+ characters');if(su&&!$('#cag').checked)return toast('Tick the box to accept the Terms and Privacy Policy');
+ try{su?await auth.createUserWithEmailAndPassword(e,p):await auth.signInWithEmailAndPassword(e,p);closeSh();toast('Welcome 👋')}catch(x){toast(authErr(x))}}
+async function cGoogle(){if(!$('#cag').checked)return toast('Tick the box to accept the Terms and Privacy Policy');const pr=new firebase.auth.GoogleAuthProvider();try{await auth.signInWithPopup(pr);closeSh()}catch(x){if(x.code==='auth/popup-blocked'||x.code==='auth/operation-not-supported-in-this-environment')return auth.signInWithRedirect(pr);if(x.code!=='auth/popup-closed-by-user')toast('Google sign-in failed: '+x.code)}}
+function vAcc(){const r=(ic,t,fn)=>`<button class="arow" onclick="${fn}"><span>${ic}</span>${t}<i>›</i></button>`;
+ return `<div class="box"><h3>Welcome to ${esc(PS.name)}!</h3><p class="mut" style="margin-top:4px">${esc(PS.about||'')}</p></div>
+ ${user?`<div class="box top"><div><b>👤 ${esc(user.displayName||user.email)}</b><p class="mut">Logged in</p></div><button class="btn g s" onclick="auth.signOut()">Log out</button></div>`:`<button class="btn" onclick="loginSheet()">👤 Log in / Sign up</button>`}
+ <div class="row2"><button class="btn" onclick="chat()">💬 Live Chat</button><button class="btn g" onclick="chat()">WhatsApp</button></div>
+ <div class="box" style="padding:0;margin-top:14px">${r('ℹ️','Help &amp; Support','chat()')}${PS.tg?r('✈️','Telegram',"openCh('tg')"):''}${PS.ig?r('📸','Instagram',"openCh('ig')"):''}${PS.fb?r('👍','Facebook',"openCh('fb')"):''}${r('📦','My orders','histSheet()')}${r('♡','Wishlist',"setPT('wish')")}${r('📤','Share this shop','shareShop()')}${r('🏬','Browse other shops',"location.hash='#shops'")}${r('📲','Install app','install()')}${r('📄','Terms of Use',"location.hash='#terms'")}${r('🔒','Privacy Policy',"location.hash='#privacy'")}${r('🏪','Sell on Mini-Store Link',"location.href='./'")}</div>`}
+function pact(id){const n=CART[id]||0;return n?`<div class="q" style="margin:12px 0 0"><button onclick="cart('${id}',-1)">−</button><b>${n} in cart</b><button onclick="cart('${id}',1)">+</button></div><button class="btn" onclick="closeSh();setPT('cart')">View cart</button>`:`<button class="btn" onclick="cart('${id}',1)">Add to cart</button>`}
+function prodSheet(id){const p=PP.find(x=>x.id===id);if(!p)return;OPEN=id;const out=isOut(p),dc=disc(p),r=PR(p),im=[p.img,...(p.imgs||[])].filter(Boolean),pk=(p.pack||'').split('\n').map(x=>x.trim()).filter(Boolean);
+ sheet(`${im.length?`<div style="position:relative"><div class="gal" onscroll="var g=document.getElementById('gc');g&&(g.textContent=(Math.round(this.scrollLeft/this.clientWidth)+1)+'/${im.length}')">${im.map(s=>`<img src="${s}">`).join('')}</div>${im.length>1?`<span class="gc" id="gc">1/${im.length}</span>`:''}</div>`:''}
+ <h3 style="margin-top:12px;font-size:18px">${esc(p.name)}</h3><div style="margin:6px 0"><b style="color:var(--ac);font-size:24px">${money(r.now)}</b>${dc?` <span class="old">${money(r.old)}</span> <span class="dsc">-${dc}%</span>`:''}</div>
+ ${p.qty>0?`<div class="stk" style="border-radius:8px">${p.qty} items in stock</div>`:''}
+ ${p.desc?`<h3 class="sh2">Description</h3><p class="mut" style="line-height:1.6">${esc(p.desc)}</p>`:''}
+ ${pk.length?`<h3 class="sh2">What's in the package</h3><ul class="pk">${pk.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+ ${PS.delivery?`<h3 class="sh2">Delivery</h3><p class="mut">🚚 ${esc(PS.delivery)}</p>`:''}
+ ${out?'<p class="mut" style="margin-top:10px">Sold out right now.</p>':`<div id="pact">${pact(id)}</div>`}
+ <div class="row2"><button class="btn g" onclick="wish('${id}')">${WISH.includes(id)?'❤️ Saved':'🤍 Save'}</button><button class="btn g" onclick="shareProd('${id}')">Share</button></div>`)}
+function wish(id){WISH=WISH.includes(id)?WISH.filter(x=>x!==id):[...WISH,id];LSs('ms_wish',WISH);prodSheet(id);drawPub()}
+function shareProd(id){const p=PP.find(x=>x.id===id),b=shopUrl(PS.id);window.open('https://wa.me/?text='+encodeURIComponent(`${p.name} · ${money(PR(p).now)} at ${PS.name}\n${b}${b.includes('?')?'&':'?'}p=${id}`))}
+function order(){const it=cartItems();if(!it.length)return;if(!(CF.n||'').trim()||!(CF.a||'').trim())return toast('Add your name and location');
+ const nets=NETS(),mo=CF.pay==='momo'&&nets.length>0,net=mo?nets[CF.net][0]:'',ch=CF.ch||'wa',t=cartTotal(it),
+ payTxt=mo?`Pay now with ${net}`+((CF.ref||'').trim()?` (Ref: ${CF.ref.trim()})`:''):'Pay on delivery',
+ msg=`Hi ${PS.name}, I want to order:\n`+it.map(x=>`• ${x.q}x ${x.p.name} (${money(PR(x.p).now)})`).join('\n')+`\n\nTotal: ${money(t)}\nPayment: ${payTxt}\nName: ${CF.n}\nPhone: ${CF.ph||'-'}\nLocation: ${CF.a}`+(CF.t?`\nNote: ${CF.t}`:'');
+ db.collection('shops').doc(PS.id).collection('orders').add({name:CF.n.trim(),phone:(CF.ph||'').trim(),addr:CF.a.trim(),note:(CF.t||'').trim(),total:t,items:it.map(x=>({n:x.p.name,q:x.q,p:PR(x.p).now})),pay:mo?'momo':'cod',net,ref:(CF.ref||'').trim(),ch,created:Date.now(),status:'new'}).catch(()=>{});
+ LSs('ms_hist_'+PS.id,[{t:Date.now(),total:t,items:it.map(x=>x.q+'× '+x.p.name).join(', ')},...LSg('ms_hist_'+PS.id,[])].slice(0,30));
+ LSs('ms_cf',{n:CF.n,ph:CF.ph,a:CF.a});
+ CART={};saveC();PT='home';drawPub();window.scrollTo(0,0);
+ if(ch==='wa')window.open('https://wa.me/'+waNum(PS.whatsapp)+'?text='+encodeURIComponent(msg),'_blank');
+ else{try{navigator.clipboard.writeText(msg).catch(()=>{})}catch(e){}toast('Order copied ✅ Paste it in the chat and send');window.open({tg:'https://t.me/'+hd(PS.tg),ig:'https://ig.me/m/'+hd(PS.ig),fb:'https://m.me/'+hd(PS.fb)}[ch],'_blank')}}
+
+/* ---------- SELLER DASHBOARD ---------- */
+let SHOP=null,MP=[],MO=[],T='prod',unsubs=[];
+async function loadDash(){
+ view('dash');unsubs.forEach(f=>f());unsubs=[];
+ const q=await db.collection('shops').where('owner','==',user.uid).limit(1).get().catch(()=>null);
+ if(!q||q.empty){SHOP=null;setupForm();return}
+ SHOP={id:q.docs[0].id,...q.docs[0].data()};applyColor(SHOP.color);applyTheme(SHOP.dtheme||LSg('ms_dth','classic'));paintHead();
+ const sd=db.collection('shops').doc(SHOP.id),ed=()=>T!=='shop'&&T!=='promo';
+ unsubs.push(sd.onSnapshot(d=>{if(d.exists){SHOP={id:d.id,...d.data()};paintHead();if(ed())draw()}}));
+ unsubs.push(sd.collection('products').orderBy('created','desc').onSnapshot(s=>{MP=s.docs.map(x=>({id:x.id,...x.data()}));if(ed())draw()}));
+ unsubs.push(sd.collection('orders').orderBy('created','desc').limit(100).onSnapshot(s=>{MO=s.docs.map(x=>({id:x.id,...x.data()}));if(ed())draw()}));
+ draw()}
+function paintHead(){$('#dName').textContent=SHOP.name;$('#dLogo').innerHTML=logoHTML(SHOP)}
+function tab(t){T=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));draw()}
+function draw(){if(!SHOP||!$('#dash').classList.contains('on'))return;({prod:dProd,ord:dOrd,stats:dStats,promo:dPromo,shop:dShop,share:dShare})[T]()}
+const shopUrl=id=>location.hostname.endsWith('github.io')?location.origin+location.pathname.replace(/[^/]*$/,'')+'?s='+id:location.origin+'/'+id;
+const link=()=>shopUrl(SHOP.id);
+
+function setupForm(){THc='classic';THd=thOk(LSg('ms_dth','classic'));$('#tabs').style.display='none';$('#dName').textContent='Welcome';
+ $('#dBody').innerHTML=`<div class="card"><h3>Create your shop</h3><p class="mut">This takes one minute.</p>
+ <label>Shop name</label><input id="sN" placeholder="e.g. Ama's Thrift">
+ <label>Shop link (letters and numbers only)</label><input id="sS" placeholder="amathrift" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9]/g,'')">
+ <label>WhatsApp number (with country code)</label><input id="sW" type="tel" placeholder="233241234567">
+ <label>About your shop</label><textarea id="sA" rows="2" placeholder="What do you sell? Where are you?"></textarea>
+ <label>Brand colour (buttons and highlights)</label><input id="sC" type="color" value="#d97757" style="height:48px;padding:4px" oninput="applyColor(this.value)">
+ <label>Customer page background</label>${swatches('c')}
+ <label>My dashboard background</label>${swatches('d')}
+ <button class="btn" onclick="createShop()">Create my shop</button></div>`}
+async function createShop(){const name=$('#sN').value.trim(),slug=$('#sS').value.trim(),wa=$('#sW').value.replace(/\D/g,'');
+ if(!name||slug.length<3||wa.length<9)return toast('Fill name, a link of 3+ letters, and your WhatsApp number');
+ if(RESERVED.includes(slug))return toast('That link is reserved. Try another.');
+ try{const r=db.collection('shops').doc(slug);if((await r.get()).exists)return toast('That link is taken. Try another.');
+  await r.set({owner:user.uid,name,whatsapp:waNum(wa),about:$('#sA').value.trim(),color:$('#sC').value||'#d97757',theme:THc,dtheme:THd,logo:'',listed:true,visits:0,premium:false,cod:true,created:Date.now()});
+  toast('Shop created 🎉');loadDash()}catch(e){toast('Could not create shop. Check Firestore rules.')}}
+
+function dProd(){const pro=isPro(SHOP);
+ $('#dBody').innerHTML=`<div class="stats"><div><b>${MP.length}</b>Products</div><div><b>${SHOP.visits||0}</b>Visits</div><div><b>${MO.length}</b>Orders</div><div><b>${money(MO.filter(o=>o.status==='done').reduce((a,o)=>a+(+o.total||0),0))}</b>Sales (done)</div></div>
+ <button class="btn" onclick="prodForm()">+ Add product</button>
+ ${pro?`<div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:var(--ac)"><span>⭐ <b>Premium active</b><span class="mut"> · ${SHOP.until&&SHOP.until<4e12?'until '+new Date(SHOP.until).toLocaleDateString():'unlimited products'}</span></span><button class="btn g s" onclick="upgrade()">Renew</button></div>`:`<div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span class="mut">Free plan: ${MP.length}/${FREE_LIMIT} products</span><button class="btn s" onclick="upgrade()">⭐ Upgrade</button></div>`}
+ ${MP.length?MP.map(p=>`<div class="pr">${p.img?`<img src="${p.img}">`:'<div class="ph">🛍️</div>'}<div class="i" onclick="prodForm('${p.id}')"><b>${esc(p.name)}</b><span class="mut">${money(p.price)} ${p.cat?'· '+esc(p.cat):''}</span><span class="mut" style="display:block;${p.qty===0?'color:#d33':''}">📦 ${p.qty==null?'No limit set':p.qty+' in stock'}</span></div><div class="tg ${p.stock!==false?'on':''}" onclick="stock('${p.id}',${p.stock!==false})"></div></div>`).join(''):'<div class="card mut" style="text-align:center">No products yet. Add your first one.</div>'}`}
+function stock(id,cur){db.collection('shops').doc(SHOP.id).collection('products').doc(id).update({stock:!cur});toast(cur?'Marked sold out':'Back in stock')}
+let IMG='',EX=[];
+function thumbs(){const t=(src,fn)=>`<div class="th"><img src="${src}"><button onclick="${fn}">×</button></div>`;
+ $('#pv').innerHTML=IMG?t(IMG,"IMG='';thumbs()"):`<label class="th">＋<input type="file" accept="image/*" hidden onchange="pickImg(this,0)"></label>`;
+ $('#pe').innerHTML=EX.map((s,i)=>t(s,`EX.splice(${i},1);thumbs()`)).join('')+(EX.length<5?`<label class="th">＋<input type="file" accept="image/*" multiple hidden onchange="pickImg(this,1)"></label>`:'')}
+async function pickImg(i,more){const fs=[...i.files];for(const f of(more?fs:fs.slice(0,1))){try{const d=await compress(f,more?640:720,.68);if(more){if(EX.length<5)EX.push(d)}else IMG=d}catch(e){toast('Could not read a photo')}}thumbs()}
+function prodForm(id){const p=MP.find(x=>x.id===id)||{};
+ if(!id&&!isPro(SHOP)&&MP.length>=FREE_LIMIT)return sheet(`<h3>Free plan limit reached</h3><p class="mut" style="margin:10px 0">You can list ${FREE_LIMIT} products for free. Upgrade to Premium for unlimited products.</p><button class="btn" onclick="upgrade()">⭐ Upgrade to Premium</button><button class="btn g" onclick="closeSh()">Close</button>`);
+ IMG=p.img||'';EX=[...(p.imgs||[])];
+ sheet(`<h3>${id?'Edit':'New'} product</h3>
+ <label>Main photo</label><div class="thumbs" id="pv"></div>
+ <label>More photos (up to 5: other angles, how it looks when worn)</label><div class="thumbs" id="pe"></div>
+ <label>Name</label><input id="pN" value="${esc(p.name)}">
+ <div class="row2"><div><label>Price (GH₵)</label><input id="pP" type="number" inputmode="decimal" value="${p.price??''}"></div><div><label>Old price (sale)</label><input id="pO" type="number" inputmode="decimal" value="${p.old||''}"></div></div>
+ <label>📦 Quantity in stock (how many do you have?)</label><input id="pQ" type="number" inputmode="numeric" min="0" value="${p.qty??''}" placeholder="e.g. 20 (leave empty for no limit)">
+ <label>Category</label><input id="pC" value="${esc(p.cat)}" placeholder="Dresses, Shoes…">
+ <label>Description</label><textarea id="pD" rows="3">${esc(p.desc)}</textarea>
+ <label>What's in the package (one item per line)</label><textarea id="pK" rows="3" placeholder="1 dress&#10;1 belt&#10;1 gift bag">${esc(p.pack)}</textarea>
+ <button class="btn" onclick="saveProd('${id||''}')">Save product</button>${id?`<button class="btn r" onclick="delProd('${id}')">Delete</button>`:''}<button class="btn g" onclick="closeSh()">Cancel</button>`);thumbs()}
+async function saveProd(id){const name=$('#pN').value.trim(),price=parseFloat($('#pP').value);if(!name||isNaN(price)||price<0)return toast('Add a name and a price');
+ const qv=$('#pQ').value.trim(),d={name,price,old:parseFloat($('#pO').value)||0,qty:qv===''?null:Math.max(0,parseInt(qv)||0),cat:$('#pC').value.trim(),desc:$('#pD').value.trim(),pack:$('#pK').value.trim(),img:IMG,imgs:EX};
+ const c=db.collection('shops').doc(SHOP.id).collection('products');
+ try{id?await c.doc(id).update(d):await c.add({...d,stock:true,created:Date.now()});closeSh();toast('Saved ✅')}catch(e){toast('Save failed: '+e.code)}}
+async function delProd(id){if(!confirm('Delete this product?'))return;await db.collection('shops').doc(SHOP.id).collection('products').doc(id).delete();closeSh()}
+
+/* ---- UPGRADE: Shop ID + activation code ---- */
+function upgrade(){const id=SHOP.id,pro=isPro(SHOP),m=encodeURIComponent(`Hi, I have paid for Mini-Store Premium.\nMy Shop ID: ${id}\nShop link: ${link()}`);
+ sheet(`<h3>${pro?'⭐ Premium active':'Go Premium ⭐'}</h3>
+ <p class="mut" style="margin:6px 0">${pro?(SHOP.until&&SHOP.until<4e12?'Active until '+new Date(SHOP.until).toLocaleDateString()+'. Renew below.':'Unlimited products, no "Powered by" tag.'):'Unlimited products and no "Powered by" tag.'}</p>
+ <div class="payinfo"><b>Step 1.</b> Send <b>${PRICE}</b> by MoMo to<br><b style="font-size:21px">${OWNER_MOMO}</b><br>Name: ${OWNER_NAME}</div>
+ <label><b>Step 2.</b> Your Shop ID (send it with your payment proof)</label>
+ <div class="row2"><input readonly value="${esc(id)}" onclick="this.select()"><button class="btn g s" style="flex:0 0 auto;margin:5px 0" onclick="copyTxt('${esc(id)}')">Copy</button></div>
+ <button class="btn" onclick="window.open('https://wa.me/${OWNER_WA}?text=${m}','_blank')">💬 I've paid. Send proof + ID</button>
+ <label style="margin-top:16px"><b>Step 3.</b> Paste the activation code you receive</label>
+ <input id="acode" placeholder="MS-261201-XXXXXXXXXXXX" autocapitalize="characters" autocomplete="off">
+ <button class="btn" onclick="activate()">Activate Premium</button><button class="btn g" onclick="closeSh()">Close</button>`)}
+async function activate(){const c=($('#acode').value||'').trim().toUpperCase().replace(/\s/g,''),m=c.match(/^MS-(\d{6})-([0-9A-F]{12})$/);
+ if(!m)return toast('That code looks wrong. Check it and try again');
+ if(!(window.crypto&&crypto.subtle))return toast('Open the site over https to activate');
+ const h=(await sha(SECRET+'|'+SHOP.id+'|'+m[1])).slice(0,12).toUpperCase();
+ if(h!==m[2])return toast('This code is not valid for your shop ID');
+ const until=Date.UTC(2000+ +m[1].slice(0,2),+m[1].slice(2,4)-1,+m[1].slice(4,6),23,59,59);
+ if(until<Date.now())return toast('This code has expired');
+ try{await db.collection('shops').doc(SHOP.id).update({premium:true,until});closeSh();toast('Premium activated 🎉')}catch(e){toast('Could not save. Check your connection.')}}
+
+const fN=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
+function svgBars(v,lab,id){const W=320,H=140,m=14,bw=(W-m*2)/v.length,mx=Math.max(1,...v);
+ return `<svg viewBox="0 0 ${W} ${H+24}" width="100%"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ac)"/><stop offset="1" stop-color="var(--ac)" stop-opacity=".3"/></linearGradient></defs>`+v.map((x,i)=>{const h=Math.max(x/mx*(H-26),3),cx=m+i*bw+bw/2;return `<rect x="${cx-bw/2+7}" y="${H-h}" width="${bw-14}" height="${h}" rx="7" fill="url(#${id})"/><text x="${cx}" y="${H-h-6}" font-size="10" fill="var(--tx)" text-anchor="middle">${x?fN(x):''}</text><text x="${cx}" y="${H+16}" font-size="10" fill="var(--mut)" text-anchor="middle">${lab[i]}</text>`}).join('')+'</svg>'}
+function donut(parts){const t=parts.reduce((a,x)=>a+x.v,0),R=46,C=2*Math.PI*R;let o=0;return `<svg viewBox="0 0 120 120" width="120"><circle r="${R}" cx="60" cy="60" fill="none" style="stroke:var(--line)" stroke-width="16"/>`+(t?parts.map(x=>{const l=x.v/t*C,e=`<circle r="${R}" cx="60" cy="60" fill="none" stroke="${x.c}" stroke-width="16" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-o}" transform="rotate(-90 60 60)"/>`;o+=l;return e}).join(''):'')+`<text x="60" y="66" text-anchor="middle" font-size="20" font-weight="700" fill="var(--tx)">${t}</text></svg>`}
+function dStats(){const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-6+i);return d}),cnt=days.map(()=>0),rev=days.map(()=>0);
+ MO.forEach(o=>{const k=days.findIndex(d=>d.toDateString()===new Date(o.created).toDateString());if(k>=0){cnt[k]++;rev[k]+=+o.total||0}});
+ const lab=days.map(d=>d.toLocaleDateString('en',{weekday:'short'}).slice(0,3)),done=MO.filter(o=>o.status==='done').length,nw=MO.length-done,tp={};
+ MO.forEach(o=>(o.items||[]).forEach(i=>tp[i.n]=(tp[i.n]||0)+i.q));const top=Object.entries(tp).sort((a,b)=>b[1]-a[1]).slice(0,5),mx=top[0]?top[0][1]:1,conv=SHOP.visits?Math.round(MO.length/SHOP.visits*100):0;
+ $('#dBody').innerHTML=`<h3>Shop stats</h3><div class="stats"><div><b>${cnt[6]}</b>Orders today</div><div><b>${money(rev.reduce((a,b)=>a+b,0))}</b>Orders value (7 days)</div><div><b>${SHOP.visits||0}</b>Shop visits</div><div><b>${conv}%</b>Visits that ordered</div></div>
+ <div class="card"><b>Orders per day</b>${svgBars(cnt,lab,'ga')}</div>
+ <div class="card"><b>Order value per day (GH₵)</b>${svgBars(rev.map(Math.round),lab,'gb')}</div>
+ <div class="card"><b>Order status</b><div style="display:flex;align-items:center;gap:20px;margin-top:8px">${donut([{v:nw,c:'#f2b705'},{v:done,c:'#3aa55d'}])}<div class="mut" style="line-height:2">🟡 New: ${nw}<br>🟢 Done: ${done}</div></div></div>
+ <div class="card"><b>Best sellers</b>${top.length?top.map(([n,q])=>`<div style="margin:12px 0"><div class="top" style="margin:0 0 5px"><span>${esc(n)}</span><b>${q}</b></div><div style="height:8px;background:var(--line);border-radius:6px"><div style="height:8px;width:${q/mx*100}%;background:var(--ac);border-radius:6px"></div></div></div>`).join(''):'<p class="mut" style="margin-top:8px">No sales yet. Share your link to get orders.</p>'}</div><p class="mut" style="text-align:center">Based on your latest 100 orders.</p>`}
+let OF='new';
+const chN={wa:'WhatsApp',tg:'Telegram',ig:'Instagram',fb:'Facebook'};
+function dOrd(){const l=MO.filter(o=>OF==='all'||(OF==='done')===(o.status==='done'));
+ $('#dBody').innerHTML=`<h3>Orders</h3><div class="chips">${[['new','New'],['done','Done'],['all','All']].map(x=>`<button class="chip ${OF===x[0]?'on':''}" onclick="OF='${x[0]}';dOrd()">${x[1]}</button>`).join('')}</div>`+(l.length?l.map(o=>`<div class="card"><div class="top" style="margin:0"><b>${esc(o.name)}</b><b style="color:var(--ac)">${money(o.total)}</b></div><p class="mut">${(o.items||[]).map(i=>`${i.q}× ${esc(i.n)}`).join(', ')}</p><p class="mut">📍 ${esc(o.addr)}${o.phone?' · 📞 '+esc(o.phone):''}</p>${o.note?`<p class="mut">📝 ${esc(o.note)}</p>`:''}<p class="mut">${o.pay==='momo'?'💳 Pay now: '+esc(o.net||'MoMo')+(o.ref?' · Ref: '+esc(o.ref):''):'💵 Pay on delivery'}${o.ch?' · via '+(chN[o.ch]||''):''}</p><p class="mut">${new Date(o.created).toLocaleString()}</p>
+ <div class="row2" style="margin-top:8px"><button class="btn g s" onclick="setOrd('${o.id}','${o.status==='done'?'new':'done'}')">${o.status==='done'?'✓ Done (undo)':'Mark done'}</button>${o.phone?`<button class="btn s" onclick="window.open('https://wa.me/${waNum(o.phone)}','_blank')">Message</button>`:''}<button class="btn r s" onclick="delOrd('${o.id}')">Delete</button></div></div>`).join(''):'<div class="card mut" style="text-align:center">No orders here yet.</div>')}
+const setOrd=(id,s)=>db.collection('shops').doc(SHOP.id).collection('orders').doc(id).update({status:s});
+const delOrd=id=>confirm('Delete this order?')&&db.collection('shops').doc(SHOP.id).collection('orders').doc(id).delete();
+
+/* ---- PROMO (with swipe slider pictures) ---- */
+const toLocal=ms=>{const d=new Date(ms-new Date(ms).getTimezoneOffset()*6e4);return d.toISOString().slice(0,16)};
+let PIM=[];
+function pthumbs(){$('#mi').innerHTML=PIM.map((s,i)=>`<div class="th"><img src="${s}"><button onclick="PIM.splice(${i},1);pthumbs()">×</button></div>`).join('')+(PIM.length<4?`<label class="th">＋<input type="file" accept="image/*" multiple hidden onchange="pickPromo(this)"></label>`:'')}
+async function pickPromo(i){for(const f of[...i.files]){if(PIM.length>=4)break;try{PIM.push(await compress(f,800,.62))}catch(e){toast('Could not read a photo')}}pthumbs()}
+function dPromo(){const m=SHOP.promo||{};PIM=[...(m.imgs||[])];
+ $('#dBody').innerHTML=`<h3>Sales promo</h3><p class="mut" style="margin-top:4px">Show a sale banner with a countdown and sliding pictures at the top of your shop page.</p><div class="card">
+ <label class="ag"><input type="checkbox" id="mOn" ${m.on?'checked':''}><span>Promo is live on my shop</span></label>
+ <label>Promo pictures (up to 4). They slide by themselves and customers can swipe.</label><div class="thumbs" id="mi"></div>
+ <label>Promo title</label><input id="mT" value="${esc(m.title)}" placeholder="e.g. Black Friday Sale">
+ <label>Message</label><textarea id="mX" rows="2" placeholder="e.g. Free delivery on orders above GH₵200">${esc(m.text)}</textarea>
+ <label>Discount on ALL products in % (optional)</label><input id="mP" type="number" inputmode="numeric" min="0" max="90" value="${m.pct||''}" placeholder="e.g. 15">
+ <label>Promo ends (optional)</label><input id="mE" type="datetime-local" value="${m.end?toLocal(m.end):''}">
+ <p class="mut" style="margin-top:8px">No discount % = only the banner shows, plus any product where you set an old price. When the end time passes, the promo switches off by itself.</p>
+ <button class="btn" onclick="savePromo()">Save promo</button><button class="btn g" onclick="window.open(link(),'_blank')">Preview my shop</button></div>`;pthumbs()}
+async function savePromo(){const on=$('#mOn').checked,title=$('#mT').value.trim(),pct=Math.min(90,Math.max(0,parseInt($('#mP').value)||0)),ev=$('#mE').value,end=ev?new Date(ev).getTime():0;
+ if(on&&!title)return toast('Give your promo a title');
+ if(on&&end&&end<Date.now())return toast('End time is in the past');
+ try{await db.collection('shops').doc(SHOP.id).update({promo:{on,title,text:$('#mX').value.trim(),pct,end,imgs:PIM}});toast(on?'Promo is live 🎉':'Promo saved (off)')}catch(e){toast('Save failed. Try fewer or smaller pictures.')}}
+
+let LOGO='';
+const THEMES=[['classic','White &amp; black','linear-gradient(135deg,#ffffff,#e6e1d6)','#1f1e1d'],['sunset','Orange','linear-gradient(135deg,#ffc58a,#f68b1e)','#3a2200'],['cream','Cream','linear-gradient(135deg,#fff0dc,#ffe0b8)','#3a2200'],['sky','Sky blue','linear-gradient(135deg,#bfe1fd,#5fb0f5)','#10243c'],['mint','Mint','linear-gradient(135deg,#bdf3d8,#4fd0a0)','#10301f'],['rose','Rose','linear-gradient(135deg,#ffd6e3,#ff8fb2)','#3a1626'],['violet','Violet','linear-gradient(135deg,#e2d6ff,#a98bf8)','#231c44'],['night','Dark','linear-gradient(135deg,#212b55,#0e1220)','#fff']];
+const thOk=k=>THEMES.some(t=>t[0]===k)?k:'classic';
+const applyTheme=k=>{document.body.className='th-'+thOk(k);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=getComputedStyle(document.body).getPropertyValue('--bg').trim()||'#f3f2ee'};
+let THc='classic',THd='classic';
+const swatches=g=>`<div class="sw sw-${g}">${THEMES.map(t=>`<button class="swb ${(g==='c'?THc:THd)===t[0]?'on':''}" style="background:${t[2]};color:${t[3]}" onclick="pickTh('${g}','${t[0]}')">${t[1]}</button>`).join('')}</div>`;
+function pickTh(g,k){if(g==='c')THc=k;else{THd=k;LSs('ms_dth',k);applyTheme(k)}document.querySelectorAll('.sw-'+g+' .swb').forEach((b,i)=>b.classList.toggle('on',THEMES[i][0]===k))}
+function drawAuthSw(){THd=thOk(LSg('ms_dth','classic'));$('#authSw').innerHTML=swatches('d')}drawAuthSw();
+function dShop(){LOGO=SHOP.logo||'';THc=thOk(SHOP.theme);THd=thOk(SHOP.dtheme||LSg('ms_dth','classic'));$('#dBody').innerHTML=`<h3>Shop settings</h3><div class="card">
+ <div class="pr"><div class="lg" id="lp" style="width:64px;height:64px">${logoHTML(SHOP)}</div><label class="btn g s" style="margin:0">Change logo<input type="file" accept="image/*" hidden onchange="pickLogo(this)"></label></div>
+ <label>Shop ID (this is your shop link name)</label><input readonly value="${esc(SHOP.id)}" onclick="this.select()">
+ <label>Shop name</label><input id="eN" value="${esc(SHOP.name)}"><label>WhatsApp number</label><input id="eW" type="tel" value="${esc(SHOP.whatsapp)}">
+ <label>About</label><textarea id="eA" rows="2">${esc(SHOP.about)}</textarea><label>Location</label><input id="eLoc" value="${esc(SHOP.location)}" placeholder="e.g. Kumasi, Adum"><label>Delivery info</label><input id="eD" value="${esc(SHOP.delivery)}" placeholder="e.g. Delivery GH₵10 in town, 1-2 days"><label>Brand colour</label><input id="eC" type="color" value="${SHOP.color||'#d97757'}" style="height:48px;padding:4px">
+ <label>Customer page background (what your customers see)</label>${swatches('c')}<label>My dashboard background (only you see this)</label>${swatches('d')}
+ <label class="ag"><input type="checkbox" id="eL" ${SHOP.listed!==false?'checked':''}><span>Show my shop on the Browse shops page</span></label></div>
+ <div class="card"><b>💬 Order channels</b><p class="mut">Customers choose where to send their order. WhatsApp is always on. Fill the others only if you have them.</p>
+ <label>Telegram username</label><input id="eT" value="${esc(SHOP.tg)}" placeholder="@yourname">
+ <label>Instagram username</label><input id="eI" value="${esc(SHOP.ig)}" placeholder="@yourshop">
+ <label>Facebook page / username</label><input id="eF" value="${esc(SHOP.fb)}" placeholder="yourpage"></div>
+ <div class="card"><b>💳 Payments</b><p class="mut">Customers pick at checkout. Leave a number empty to hide that network.</p>
+ <label class="ag"><input type="checkbox" id="eCod" ${SHOP.cod!==false?'checked':''}><span>Allow pay on delivery</span></label>
+ <label>MTN MoMo number</label><input id="eM" type="tel" value="${esc(SHOP.mtn||SHOP.momo)}" placeholder="024…">
+ <label>Telecel Cash number</label><input id="eTc" type="tel" value="${esc(SHOP.tcl)}" placeholder="020…">
+ <label>AirtelTigo (AT Money) number</label><input id="eAt" type="tel" value="${esc(SHOP.atg)}" placeholder="026…">
+ <label>MoMo account name</label><input id="eMn" value="${esc(SHOP.momoName)}" placeholder="Name on the MoMo account"></div>
+ <button class="btn" onclick="saveShop()">Save changes</button>
+ <button class="btn g" onclick="location.hash='#terms'">Terms of Use</button><button class="btn g" onclick="location.hash='#privacy'">Privacy Policy</button>
+ <button class="btn r" onclick="delAccount()">Delete my shop and account</button>`}
+async function pickLogo(i){if(!i.files[0])return;LOGO=await compress(i.files[0],200,.8);$('#lp').innerHTML=`<img src="${LOGO}">`}
+async function saveShop(){const n=$('#eN').value.trim(),w=$('#eW').value.replace(/\D/g,'');if(!n||w.length<9)return toast('Check your name and WhatsApp number');
+ try{await db.collection('shops').doc(SHOP.id).update({name:n,whatsapp:waNum(w),about:$('#eA').value.trim(),color:$('#eC').value,theme:THc,dtheme:THd,logo:LOGO,listed:$('#eL').checked,location:$('#eLoc').value.trim(),delivery:$('#eD').value.trim(),tg:hd($('#eT').value),ig:hd($('#eI').value),fb:hd($('#eF').value),cod:$('#eCod').checked,mtn:$('#eM').value.trim(),tcl:$('#eTc').value.trim(),atg:$('#eAt').value.trim(),momoName:$('#eMn').value.trim(),momo:''});applyColor($('#eC').value);toast('Saved ✅')}catch(e){toast('Save failed')}}
+async function delAccount(){if(!confirm('This deletes your shop, products and orders for good. Continue?'))return;
+ try{const r=db.collection('shops').doc(SHOP.id);for(const c of['products','orders']){const s=await r.collection(c).get();await Promise.all(s.docs.map(d=>d.ref.delete()))}await r.delete();await user.delete();toast('Account deleted')}catch(e){toast(e.code==='auth/requires-recent-login'?'Log out, log in again, then retry.':'Could not delete')}}
+
+function dShare(){const l=link(),m=encodeURIComponent(`Shop with ${SHOP.name} 🛍️ Browse and order here: ${l}`);
+ $('#dBody').innerHTML=`<h3>Share your shop</h3><div class="card"><p class="mut">Your shop link</p><b style="word-break:break-all;color:var(--ac)">${esc(l)}</b>
+ <button class="btn" onclick="copyTxt('${l}')">Copy link</button>
+ <button class="btn g" onclick="window.open('https://wa.me/?text=${m}')">Share on WhatsApp</button>
+ <button class="btn g" onclick="window.open('${l}','_blank')">Preview my shop</button></div>
+ <div class="card"><p class="mut" style="text-align:center">QR code for flyers and your counter</p><div id="qr"></div></div>
+ <button class="btn" onclick="install()">📲 Install this app</button>`;
+ try{new QRCode($('#qr'),{text:l,width:180,height:180})}catch(e){$('#qr').textContent='QR unavailable offline'}}
+
+/* ---------- SEO + BROWSE ---------- */
+function meta(k,c){let m=document.querySelector(`meta[name="${k}"],meta[property="${k}"]`);if(!m){m=document.createElement('meta');m.setAttribute(k.startsWith('og:')?'property':'name',k);document.head.append(m)}m.content=c}
+function seo(s){const t=s.name+' | Order on WhatsApp',d=(s.about||`Browse ${s.name} and order on WhatsApp.`).slice(0,155),u=shopUrl(s.id);
+ document.title=t;meta('description',d);meta('og:title',t);meta('og:description',d);meta('og:url',u);meta('og:type','website');meta('robots','index,follow');
+ let c=document.querySelector('link[rel=canonical]');if(!c){c=document.createElement('link');c.rel='canonical';document.head.append(c)}c.href=u;
+ const j=document.createElement('script');j.type='application/ld+json';j.text=JSON.stringify({'@context':'https://schema.org','@type':'Store',name:s.name,description:d,url:u});document.head.append(j)}
+async function loadShops(){view('shops');document.title='Browse shops | '+APP_NAME;const b=$('#shGrid');b.innerHTML='<p class="mut">Loading shops…</p>';
+ try{const q=await db.collection('shops').where('listed','==',true).limit(60).get();
+  b.innerHTML=q.docs.length?q.docs.map(d=>{const x=d.data();return `<a class="card pr" href="${shopUrl(d.id)}" style="text-decoration:none;color:inherit;border-bottom:1px solid var(--line)"><div class="lg" style="width:56px;height:56px">${logoHTML(x)}</div><div class="i"><b>${esc(x.name)}</b><span class="mut">${esc((x.about||'').slice(0,70))}</span></div></a>`}).join(''):'<p class="mut">No shops listed yet.</p>'}
+ catch(e){b.innerHTML='<p class="mut">Could not load shops. Check your connection.</p>'}}
+
+/* ---------- LEGAL ---------- */
+function legal(w){view('legal');const T=`<h2>Terms of Use</h2><p class="mut">Last updated: 2026</p>
+<h3>1. About ${APP_NAME}</h3><p>${APP_NAME} lets sellers create an online shop link and receive customer orders through WhatsApp. We do not take part in sales, deliveries or payments between buyers and sellers.</p>
+<h3>2. Your account</h3><p>You must give true information and keep your password safe. You are responsible for everything done on your account.</p>
+<h3>3. What you may not do</h3><p>Do not sell illegal, stolen, fake or harmful goods. Do not post content you do not own, or content that is hateful, adult, or misleading. Do not misuse or attack the service.</p>
+<h3>4. Sellers' responsibility</h3><p>Sellers are fully responsible for their products, prices, delivery, refunds and dealings with customers. Buyers should be careful and pay only when satisfied.</p>
+<h3>5. Plans and fees</h3><p>A free plan is available with limits. Premium features are paid by mobile money and may be changed with notice.</p>
+<h3>6. Suspension</h3><p>We may suspend or remove shops that break these terms or the law.</p>
+<h3>7. Liability</h3><p>The service is provided as is. We are not liable for losses from transactions between users.</p>
+<h3>8. Contact</h3><p>${esc(SUPPORT_EMAIL)}</p>`;
+ const P=`<h2>Privacy Policy</h2><p class="mut">Last updated: 2026</p>
+<h3>What we collect</h3><p>Seller account details (email, name from Google sign-in), shop information, product photos and prices, and orders customers send. Customers' names and delivery locations are saved only when they place an order.</p>
+<h3>Why</h3><p>To run your shop, show it to customers, and show you your orders and visit counts.</p>
+<h3>Who sees it</h3><p>Shop pages and products are public. Orders are visible only to the shop owner. We use Google Firebase to store data and we do not sell your data.</p>
+<h3>Permissions</h3><p>We only ask for access to your photos when you choose to upload one.</p>
+<h3>Your rights</h3><p>You can edit your data in the app, or delete your shop and account from Shop settings. Data is then removed. Under Ghana's Data Protection Act, 2012 you may also ask us for a copy of your data.</p>
+<h3>Contact</h3><p>${esc(SUPPORT_EMAIL)}</p>`;
+ $('#lBody').innerHTML=w==='terms'?T:P}
+</script>
+</body>
+</html>
+:0;background:var(--bar);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);margin:-18px -16px 12px;padding:12px 16px 10px;z-index:15;border-top:4px solid var(--ac);box-shadow:0 4px 20px var(--shd)}
 .ph0{display:flex;align-items:center;gap:10px;margin-bottom:8px}.ph0 .lg{width:32px;height:32px;border-radius:8px;font-size:13px}
 .srch{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:0 16px}.srch input{background:none;border:0;margin:0;padding:13px 0}
 .box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;box-shadow:0 4px 18px var(--shd)}
